@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-
 /*
 
    The depths of a river H are measured at equally spaced distances across a channel as tabulated below.
@@ -16,6 +12,10 @@ using namespace std;
 
  */
 
+#include <bits/stdc++.h>
+
+using namespace std;
+
 
 double h[] = { 0, 1.9, 2, 2, 2.4, 2.6, 2.25, 1.12, 0 };
 
@@ -23,58 +23,51 @@ double func(double x) {
     return h[(int)x];
 }
 
-double multiple_trapezoid_rule(double a, double b,  int segment) {
-    double result;
-    double step = (b - a) / pow(2, segment);
+double multiTrap(double a, double b,  int n) {
+    double h      = (b - a) / pow(2, n);
+    double result = func(a) + func(b);
 
-    result = func(a) + func(b);
-
-    for (int i = 1; i <= segment; i++) {
-        result += 2 * func(a + i * step);
+    for (int i = 1; i <= n; i++) {
+        result += 2 * func(a + i * h);
     }
 
-    result *= (b - a) / pow(2, segment);
+    result *= (b - a) / pow(2, n);
     return result;
 }
 
-double rhomberg(double a, double b) {
-    int n        = 6;
-    int segments = 1;
-    double I[n][n];
+double romberg(double a, double b) {
+    int size             = 5;
+    int n                = 1;
+    double R[size][size] = {};
 
-    // set all values to 0.0
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++) I[i][j] = 0.0;
-
-    // Use Trrapazoidal rule to construct [i][1] values
-    for (int i = 1; i < n; i++) {
-        I[i][1] = multiple_trapezoid_rule(a, b, segments);
-        segments++;
+    // Use Trapazoidal rule to construct [i][1] values
+    for (int i = 1; i < size; i++) {
+        R[i][1] = multiTrap(a, b, n);
+        n++;
     }
 
     // Iterate through the rest of the matric and compute using Romberg Formula
-    for (int i = 2; i < n; i++) {
-        for (int j = 1; j < n - i + 1; j++) {
-            I[j][i] = I[j][i - 1] + ((I[j][i - 1] - I[j - 1][i - 1]) / (pow(4, (i - 1)) - 1));
+    for (int k = 2; k < size; k++) {
+        for (int j = 1; j < size - k; j++) {
+            R[j][k] = (pow(4, (k - 1)) * R[j + 1][k - 1] - R[j][k - 1]) / (pow(4, (k - 1)) - 1);
         }
     }
 
-    // Print out the resulting grid
-    for (int i = 1; i < n - 2; i++) {
-        // for (int j = 1; j < n - i; j++) {
-        for (int j = 1; j <=  i; j++) {
-            cout << I[i][j] << " ";
-        } cout << endl;
+    // Print resulting grid
+    for (int i = 1; i < size; i++) {
+        for (int j = 1; j < size - i; j++) {
+            cout << R[i][j] << " ";
+        }
+        cout << endl;
     }
 
-    // return final result
-    return I[3][3];
+    return R[1][size - 2];
 }
 
 int main() {
-    double a      = 0;
-    double b      = 16;
-    double result = rhomberg(a, b);
+    double a      = 0.0;
+    double b      = 16.0;
+    double result = romberg(a, b);
 
     cout << "Result: " << result << endl;
 
