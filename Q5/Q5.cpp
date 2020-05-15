@@ -3,39 +3,48 @@
 
 using namespace std;
 
-double func(double t) {
-    double e = exp(1.0);
-    double g = 9.81;
-    double m = 80.0;
-    double c = 10.0;
+// double func(double t) {}
+vector<double> tval;
+vector<double> eulval;
+vector<double> rkval;
 
-    return g * m / c * (1 - pow(e, -(c / m) * t));
+void dataDump() {
+    ofstream myfile;
+
+    myfile.open("graph.txt");
+
+    for (int i = 0; i < tval.size(); i++) {
+        myfile << tval[i] << " " << eulval[i] << " " << rkval[i] << endl;
+    }
+
+    myfile.close();
 }
 
 double errorFunction(double total, double current) {
     return (total * current / total) * 100;
 }
 
-double multiTrap(double a, double b,  int n) {
+double multiTrap(double a, double b,  int n, vector<double>& func) {
     double h      = (b - a) / n;
-    double result = func(a) + func(b);
+    double result = func[a] + func[b];
 
     for (int i = 1; i < n; i++) {
-        result += 2 * func(a + i * h);
+        result += 2 * func[a + i * h];
     }
     result *= (b - a) / (2 * n);
 
     return result;
 }
 
-double rhomberg(double a, double b) {
+double rhomberg(double a, double b, vector<double>& f) {
     int size             = 5;
     int n                = 1;
     double R[size][size] = {};
 
+
     // Use Trapazoidal rule to construct [i][1] values
     for (int i = 1; i < size; i++) {
-        R[i][1] = multiTrap(a, b, n);
+        R[i][1] = multiTrap(a, b, n, f);
         n      *= 2;
     }
 
@@ -46,13 +55,6 @@ double rhomberg(double a, double b) {
         }
     }
 
-    // Print resulting grid
-    for (int i = 1; i < size; i++) {
-        for (int j = 1; j < size - i; j++) {
-            cout << R[i][j] << " ";
-        }
-        cout << endl;
-    }
     return R[1][size - 1];
 }
 
@@ -63,36 +65,40 @@ double f(double v) {
 }
 
 int euler(double t, double h, double v1, vector<double>& eul) {
-    cout << v1 << endl;
     double v, s;
 
-    for (; t <= 1.0; t += h) {
+    for (; t <= 50.0; t += h) {
         s = f(v1);
         v = v1 + s * h;
-        cout << v << " ";
-        v1 = v;
+
         eul.push_back(v);
+
+        if (fabs(v1 - v) < 0.0015) {
+            break;
+        }
+        v1 = v;
     }
-    cout << endl;
     return 0;
 }
 
 int rk4(double t, double h, double v1, vector<double>& rk) {
     double v, k1, k2, k3, k4;
 
-    cout << y1 << " ";
 
-    for (; t <= 1.0; t += h) {
+    for (; t <= 50.0; t += h) {
         k1 = f(v1);
         k2 = f(v1 + k1 * h / 2);
         k3 = f(v1 + k2 * h / 2);
         k4 = f(v1 + k3 * h);
         v  = v1 + (k1 + 2 * k2 + 2 * k3 + k4) * h / 6;
-        cout << v << " ";
-        v1 = v;
         rk.push_back(v);
+
+        if (fabs(v1 - v) < 0.0015) {
+            break;
+        }
+        v1 = v;
     }
-    cout << endl;
+
     return 0;
 }
 
@@ -100,7 +106,8 @@ int main() {
     // double a = 0.0;
     // double b = 8.0;
     // double actual = 230.969;
-    double t = 0.0, h = 0.1;
+    double t = 0.0, h = 0.01;
+
 
     double v1 =  f(0); // 1.0;
 
@@ -112,20 +119,37 @@ int main() {
 
     rk4(t, h, v1, rk);
 
-    double eulSum = 0, rkSum = 0;
-    cout << "t" << setw(20) << "Euler Velocity" << setw(19) << "RK Velocity" << setw(10) << "Distance" << endl;
-    cout << "-----------------------------------------------------------------\n";
 
-    for (int i = 0; i < eul.size(); i++) {
-        double t = (double)(i + 1) / (double)100;
-        eulSum += eul[i];
-        rkSum  += rk[i];
+    double a = 0.0, b = 1.0;
+    double res1 = 0.0;
 
-        cout << t << setw(13) << eul[i] << setw(15) << rk[i] << setw(10) <<  eulSum << " vs " << rkSum << endl;
+    while (res1 <= 1000) {
+        res1 = rhomberg(a, b, eul);
+
+        // cout << res1 << " ";
+        b += 0.01;
+    }
+    cout << "Time of impact for Euler = " << b / 10  << " at distance = " << res1  << endl;
+
+    double a1 = 0.0, b1 = 1.0;
+    double res2 = 0.0;
+
+    while (res2 <= 1000) {
+        res2 = rhomberg(a1, b1, rk);
+
+        b1 += 0.01;
+    }
+    cout << "Time of impact for RK = " << b1 / 10  << " at distance = " << res2 << endl;
+    double tdump = 1.0;
+
+    for (int i = 0; i <= eul.size(); i += 100) {
+        tdump += 1;
+        tval.push_back(tdump);
+        rkval.push_back(rk[i]);
+        eulval.push_back(eul[i]);
     }
 
-    double a = 0.0, b = 6.0;
-    double res1 = rhomberg(a, b);
+    dataDump();
 
 
     return 0;

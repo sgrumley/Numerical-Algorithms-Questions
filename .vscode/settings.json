@@ -3,7 +3,8 @@
         "iostream": "cpp",
         "cmath": "cpp",
         "iomanip": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "ostream": "cpp"
     },
     "python.formatting.provider": "black"
 }

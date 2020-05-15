@@ -96,3 +96,23 @@ int main() {
     angle = findAngle(yDif, xDif);
     cout << "Angle of inclination @ 10 sec: " << angle << " degrees" << endl;
 }
+
+// centered diff
+// double f1(double x){
+//     return x * x * x + 4 * x - 15;
+// }
+
+// double df1(double x){
+//     return 3 * x * x + 4;
+// }
+
+// int main(){
+//     double x, h, v, error;
+
+//     x     = 0.0;
+//     h     = 0.25;
+//     v     = (f1(x + h) - f1(x - h)) / (2 * h);
+//     error = fabs(df1(x) - v) * 100 / df1(x);
+//     cout << "Function 1 : Value = "
+//          << v << ", Error = " << error << "%" << endl;
+// }

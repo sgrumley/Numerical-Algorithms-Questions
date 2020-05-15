@@ -18,6 +18,7 @@ for i in range(len(x)):
     lm1.append(math.log(m1[i]))
     lm2.append(math.log(m2[i]))
 
+
 plt.title("Question 8 ln")
 plt.xlabel("Time")
 plt.ylabel("Measured")
