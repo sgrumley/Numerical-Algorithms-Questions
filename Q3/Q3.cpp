@@ -18,13 +18,30 @@ using namespace std;
 
 
 double h[] = { 0, 1.9, 2, 2, 2.4, 2.6, 2.25, 1.12, 0 };
+vector<double> hstep;
+vector<double> yval;
 
 double func(double x) {
     return h[(int)x];
 }
 
+void dataDump() {
+    ofstream myfile;
+
+    myfile.open("graph.txt");
+
+    for (int i = 0; i < hstep.size(); i++) {
+        myfile << hstep[i] << " " << yval[i] << endl;
+    }
+
+    myfile.close();
+}
+
 double multiTrap(double a, double b,  int n) {
-    double h      = (b - a) / pow(2, n);
+    double h = (b - a) / pow(2, n);
+
+    hstep.push_back(h);
+    yval.push_back(func(h));
     double result = func(a) + func(b);
 
     for (int i = 1; i <= n; i++) {
@@ -70,6 +87,7 @@ int main() {
     double result = romberg(a, b);
 
     cout << "Result: " << result << endl;
+    dataDump();
 
     return 0;
 }

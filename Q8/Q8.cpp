@@ -23,30 +23,18 @@ void leastSquare(vector<double>& x, vector<double>& y) {
         xysum += x[i] * y[i];
     }
     a1 = (n * xysum - xsum * ysum) / (n * x2sum - xsum * xsum); // calculate slope
-    a0 = (ysum / n) - (xsum / n) * a1;
+    a0 = (ysum / n) - a1 * (xsum / n);                          // calculate intercept
 
+    double sr, st;
 
-    double newFit[n];
+    for (int i = 0; i < y.size(); i++) {
+        sr += pow(y[i] - a0 - a1 * x[i], 2);
 
-    for (int i = 0; i < n; i++) {
-        newFit[i] = a0 + a1 * x[i];
-
-        // need sum of error squared
-        // pow(y[i] - a0 - a1 * x[i], 2) = Sr
-        // St = (sum of yi - y fit)^2
+        st += pow(y[i] - (ysum / n), 2);
     }
 
-    // St - Sr quantifies improvement
-    // r^2 = St -Sr / St
-    //
-
-    cout << "S.no" << setw(5) << "x" << setw(19) << "y(observed)" << setw(19) << "y(fitted)" << endl;
-    cout << "-----------------------------------------------------------------\n";
-
-    for (int i = 0; i < n; i++) {
-        cout << i + 1 << "." << setw(8) << x[i] << setw(15) << y[i] << setw(18) << newFit[i] << endl;
-    }
-    cout << "\nThe linear fit line is of the form:\n\n" << a1 << "x + " << a0 << endl;
+    double r = (st - sr) / st;
+    cout << r << endl;
 }
 
 int main() {
@@ -57,6 +45,15 @@ int main() {
 
     int n = x.size();
 
+    cout << "Goodness of OG data" << endl;
+    leastSquare(x, y);
+
+    cout << "Goodness of M1" << endl;
+    leastSquare(x, m1);
+
+    cout << "Goodness of M2" << endl;
+    leastSquare(x, m1);
+
     for (int i = 0; i < n; i++) {
         m1[i] = log10(m1[i]);
         m2[i] = log10(m2[i]);
@@ -65,26 +62,15 @@ int main() {
     }
 
 
-    // print log(x,y,m1.m2) -> run get my least square -> change the function to suit lecture slide
-    // goodness of our fit
-
-    cout << "Least Square method" << endl;
+    cout << "Goodness of OG data" << endl;
     leastSquare(x, y);
 
 
-    cout << "Square of the models" << endl;
-    leastSquare(m1, m2);
+    cout << "Goodness of M1" << endl;
+    leastSquare(x, m1);
 
-
-    cout << "S.no" << setw(5) << "x" << setw(19) << "y(observed)" << setw(19) << "y(fitted)" << endl;
-    cout << "-----------------------------------------------------------------\n";
-
-    for (int i = 0; i < n; i++) {
-        cout << x[i] << "." << setw(10) << y[i] << setw(15) << m1[i] << setw(18) << m2[i] << endl;
-    }
-
-    // leastSquare(x, m2);
-
+    cout << "Goodness of M2" << endl;
+    leastSquare(x, m1);
 
     return 0;
 }

@@ -2,30 +2,30 @@
 
 using namespace std;
 
+vector<double> xval;
+vector<double> yval;
+
+vector<double> yval1;
+
+void dataDump() {
+    ofstream myfile;
+
+    myfile.open("graph.txt");
+
+    for (int i = 0; i < xval.size(); i++) {
+        myfile << xval[i] << " " << yval[i] << " " << yval1[i] <<  endl;
+    }
+
+    myfile.close();
+}
+
 double f(double x) {
     return 2510 * log(2800000 / (2800000 - 13300 * x)) - 9.81 * x;
 }
 
-double secant() {
-    double x0 = -1, x1 = -1.1, x2;
-    double fx0 = f(x0), fx1 = f(x1);
-
-    while (fabs(x1 - x0) >= 0.00001)
-    { x2  = (fx1 * x0 - fx0 * x1) / (fx1 - fx0);
-      x0  = x1;
-      fx0 = fx1;
-      x1  = x2;
-      fx1 = f(x1); }
-    return x2;
-}
-
-double interpolate(int n, double xv) {
+double interpolate(int n, double xv, vector<double>& x, vector<double>& y) {
     // Generate divided difference table
-    double y[7] = { 2, 5.4375, 7.3516, 7.5625, 8.4453, 9.1875, 12 };
-    double x[7] = { 0, 1, 2.5, 3, 4.5, 5, 6 };
 
-    // double x[] = { -5, -1, 0, 2 };
-    // double y[] = { -2, 6, 1, 3 };
 
     double dd[n][n];
 
@@ -41,7 +41,7 @@ double interpolate(int n, double xv) {
 
     for (int i = 1; i < n; i++) {
         for (int j = 0; j < n - i; j++) {
-            cout << dd[i][j] << " ";
+            cout << setw(j + 1 * 15) << dd[i][j];
         } cout << endl;
     }
 
@@ -60,11 +60,30 @@ double interpolate(int n, double xv) {
 }
 
 int main() {
-    int n     = 6;
-    double xv = 3.5;
+    int n            = 7;
+    double xv        = 3.5;
+    vector<double> y = { 2, 5.4375, 7.3516, 7.5625, 8.4453, 9.1875, 12 };
+    vector<double> x = { 0, 1, 2.5, 3, 4.5, 5, 6 };
 
-    cout << "final result " << interpolate(n, xv);
+    cout << "f(x) x = 3.5 y = " << interpolate(n, xv, x, y) << endl;
 
-    // printf("x = %.4lf, f(x) = %lf\n", xr, f(xr));
+    // for (int i = 0; i < 8; i++) {
+    //     double a = interpolate(n, i, x, y);
+    //     xval.push_back(i);
+    //     yval.push_back(a);
+    // }
+
+    x = { 3, 2.5, 4.5, 5, 1, 6, 0 };
+    y = { 7.5625, 7.3516, 8.4453, 9.1875, 5.4375, 12, 2 };
+
+    cout << "f(x) x = 3.5 y = " << interpolate(n, xv, x, y);
+
+    // for (int i = 0; i < 8; i++) {
+    //     double a = interpolate(n, i, x, y);
+    //     yval1.push_back(a);
+    // }
+
+    // dataDump();
+
     return 0;
 }

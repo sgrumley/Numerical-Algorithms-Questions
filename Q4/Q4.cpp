@@ -14,6 +14,9 @@
 
 using namespace std;
 
+vector<double> xval;
+vector<double> yval;
+
 double func(double t) {
     double e = exp(1.0);
     double g = 9.81;
@@ -27,8 +30,22 @@ double errorFunction(double total, double current) {
     return (total * current / total) * 100;
 }
 
+void dataDump() {
+    ofstream myfile;
+
+    myfile.open("graph.txt");
+
+    for (int i = 0; i < xval.size(); i++) {
+        myfile << xval[i] << " " << yval[i] << endl;
+    }
+
+    myfile.close();
+}
+
 double multiTrap(double a, double b,  int n) {
-    double h      = (b - a) / n;
+    double h = (b - a) / n;
+
+
     double result = func(a) + func(b);
 
     for (int i = 1; i < n; i++) {
@@ -74,6 +91,13 @@ int main() {
     double result = rhomberg(a, b);
 
     cout << "Result: " << result << endl;
+
+    for (; a <= b; a++) {
+        xval.push_back(a);
+        yval.push_back(func(a));
+    }
+
+    dataDump();
 
     return 0;
 }
