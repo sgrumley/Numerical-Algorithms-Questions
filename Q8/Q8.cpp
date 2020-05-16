@@ -16,20 +16,23 @@ void leastSquare(vector<double>& x, vector<double>& y) {
         // sum of y
         ysum += y[i];
 
-        // sum of x^2
+        // sum of x squared
         x2sum += pow(x[i], 2);
 
         // sum of x*y
         xysum += x[i] * y[i];
     }
-    a1 = (n * xysum - xsum * ysum) / (n * x2sum - xsum * xsum); // calculate slope
-    a0 = (ysum / n) - a1 * (xsum / n);                          // calculate intercept
+
+    // calculate slope
+    a1 = (n * xysum - xsum * ysum) / (n * x2sum - xsum * xsum);
+
+    // calculate intercept
+    a0 = (ysum / n) - a1 * (xsum / n);
 
     double sr, st;
 
     for (int i = 0; i < y.size(); i++) {
         sr += pow(y[i] - a0 - a1 * x[i], 2);
-
         st += pow(y[i] - (ysum / n), 2);
     }
 

@@ -1,21 +1,21 @@
-/*
-
-   Given the following formula for a falling body:
-
-   𝑣= 𝑔𝑚 / 𝑐 * (1−	𝑒,^-(c/m)t)
-
-   where g = 9.8 m/s2 and linear drag c = 10 kg/s.
-
-   Write a C++ program that uses Romberg integration which determines how far the body falls,
-   to an approximate error of 1%, in the first 8 seconds when m = 80kg.
-
- */
 #include <bits/stdc++.h>
 
 using namespace std;
 
 vector<double> xval;
 vector<double> yval;
+
+void dataDump() {
+    ofstream myfile;
+
+    myfile.open("graph.txt");
+
+    for (int i = 0; i < xval.size(); i++) {
+        myfile << xval[i] << " " << yval[i] << endl;
+    }
+
+    myfile.close();
+}
 
 double func(double t) {
     double e = exp(1.0);
@@ -28,18 +28,6 @@ double func(double t) {
 
 double errorFunction(double total, double current) {
     return (total * current / total) * 100;
-}
-
-void dataDump() {
-    ofstream myfile;
-
-    myfile.open("graph.txt");
-
-    for (int i = 0; i < xval.size(); i++) {
-        myfile << xval[i] << " " << yval[i] << endl;
-    }
-
-    myfile.close();
 }
 
 double multiTrap(double a, double b,  int n) {
@@ -56,7 +44,7 @@ double multiTrap(double a, double b,  int n) {
     return result;
 }
 
-double rhomberg(double a, double b) {
+double romberg(double a, double b) {
     int size             = 5;
     int n                = 1;
     double R[size][size] = {};
@@ -88,7 +76,7 @@ int main() {
     double a      = 0.0;
     double b      = 8.0;
     double actual = 230.969;
-    double result = rhomberg(a, b);
+    double result = romberg(a, b);
 
     cout << "Result: " << result << endl;
 

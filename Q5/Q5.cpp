@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// double func(double t) {}
 vector<double> tval;
 vector<double> eulval;
 vector<double> rkval;
@@ -103,35 +102,28 @@ int rk4(double t, double h, double v1, vector<double>& rk) {
 }
 
 int main() {
-    // double a = 0.0;
-    // double b = 8.0;
-    // double actual = 230.969;
     double t = 0.0, h = 0.01;
-
-
-    double v1 =  f(0); // 1.0;
+    double v1 =  f(0);
 
     vector<double> eul;
     vector<double> rk;
 
     euler(t, h, v1, eul);
-
-
     rk4(t, h, v1, rk);
 
 
-    double a = 0.0, b = 1.0;
+    double a    = 0.0;
+    double b    = 1.0;
     double res1 = 0.0;
 
     while (res1 <= 1000) {
         res1 = rhomberg(a, b, eul);
-
-        // cout << res1 << " ";
-        b += 0.01;
+        b   += 0.01;
     }
     cout << "Time of impact for Euler = " << b / 10  << " at distance = " << res1  << endl;
 
-    double a1 = 0.0, b1 = 1.0;
+    double a1   = 0.0;
+    double b1   = 1.0;
     double res2 = 0.0;
 
     while (res2 <= 1000) {

@@ -4,7 +4,6 @@ using namespace std;
 
 vector<double> xval;
 vector<double> yval;
-
 vector<double> yval1;
 
 void dataDump() {
@@ -25,8 +24,6 @@ double f(double x) {
 
 double interpolate(int n, double xv, vector<double>& x, vector<double>& y) {
     // Generate divided difference table
-
-
     double dd[n][n];
 
     for (int i = 0; i < n; i++) {
@@ -67,6 +64,7 @@ int main() {
 
     cout << "f(x) x = 3.5 y = " << interpolate(n, xv, x, y) << endl;
 
+    // Only needed for graphing
     // for (int i = 0; i < 8; i++) {
     //     double a = interpolate(n, i, x, y);
     //     xval.push_back(i);
@@ -78,6 +76,7 @@ int main() {
 
     cout << "f(x) x = 3.5 y = " << interpolate(n, xv, x, y);
 
+    // Only needed for graphing
     // for (int i = 0; i < 8; i++) {
     //     double a = interpolate(n, i, x, y);
     //     yval1.push_back(a);

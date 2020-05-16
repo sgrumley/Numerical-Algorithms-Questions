@@ -26,24 +26,16 @@ double ysection(double m) {
     double b = m;
     double c;
 
-    // double n = 0;
-
     for (int n = 0; n < 80; n++) {
         c = (a + b) / 2;
 
-        // cout << a << " " << b << " " << c << endl;
-        // cout << f(c) << " "  << c << endl;
-
         if (f(c) > f(c + 1)) {
-            b = c;
-
             // a, c new intervals
+            b = c;
         } else {
-            a = c + 1;
-
             // b, c new intervals
+            a = c + 1;
         }
-
 
         if ((b - a) / pow(2, n + 1) <= 0.0001) {
             return c;
@@ -56,27 +48,18 @@ double bisection() {
     double b = 500;
     double c;
 
-    // double n = 0;
-
     for (int n = 0; n < 15; n++) {
         c = (a + b) / 2;
 
-        // cout << a << " " << b << " " << c << endl;
-        // cout << f(a) << " " << f(b) << " " << f(c) << endl;
-
         if (f(c) * f(a) < 0) {
-            b = c;
-
             // a, c new intervals
+            b = c;
         } else {
-            a = c;
-
             // b, c new intervals
+            a = c;
         }
 
-
         if ((b - a) / pow(2, n + 1) <= 0.0001) {
-            // return c;
             return ysection(c);
         }
     }

@@ -50,7 +50,6 @@ float floatfunc() {
     x = 0.5;
     h = 0.001;
 
-    // Approximating difference
     cout << "Float\n";
 
     for (int i = 0; i < 10; i++) {
@@ -77,14 +76,11 @@ double rounderr(double x, double h) {
 }
 
 int main() {
-    // calculating error
-
     double x, h, v, error;
 
     x = 0.5;
     h = 0.001;
 
-    // Approximating difference
     cout << "Double\n";
 
     for (int i = 0; i < 10; i++) {
@@ -109,8 +105,3 @@ int main() {
 
     return 0;
 }
-
-// Need to figure out the value of h
-
-// find round off error and trunctation error
-// use random h steps and put them back into h optimal

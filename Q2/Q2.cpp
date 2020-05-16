@@ -1,27 +1,7 @@
-#include <iostream>
 #include <bits/stdc++.h>
-#include <cmath>
-#include <math.h>
-#define _USE_MATH_DEFINES
+
 using namespace std;
 
-/*
-
-   Q2 Radars A and B, distance a = 500 m apart, track plane C by recording angles α and β at onesecond intervals.
-   Three successive readings are:
-
- |9		|10		|11
- |-------|-------|-------
-   A(deg)	|54.80	|54.06	|53.34
-   B(deg)	|65.59	|64.59	|63.62
-
-   Calculate the speed v of the plane and the climb angle γ at t = 10 s. The (x, y) coordinates of the plane are:
-
-   x = a * (tan degB/ tan degB - tan degA)
-
-   y = a * (tan degA * tan degB / tan degB - tan degA)
-
- */
 double tanDeg(double deg) {
     return tan(deg * M_PI / 180);
 }
@@ -77,42 +57,16 @@ int main() {
     x1 = xfunc(a, degA10, degB10);
     y1 = yfunc(a, degA10, degB10);
 
-    // cout << x1 << " " << y1 << endl;
-
     x2 = xfunc(a, degA11, degB11);
     y2 = yfunc(a, degA11, degB11);
 
     xDif = x2 - x1;
     yDif = y2 - y1;
 
-    // cout << "xDif " << xDif << endl;
-    // cout << "yDif " << yDif << endl;
-
     hyp = pythag(xDif, yDif);
-
-    s = speed(hyp, 1);
+    s   = speed(hyp, 1);
     cout << "Speed at 10 sec: " << s  << " m/s" << endl;
 
     angle = findAngle(yDif, xDif);
     cout << "Angle of inclination @ 10 sec: " << angle << " degrees" << endl;
 }
-
-// centered diff
-// double f1(double x){
-//     return x * x * x + 4 * x - 15;
-// }
-
-// double df1(double x){
-//     return 3 * x * x + 4;
-// }
-
-// int main(){
-//     double x, h, v, error;
-
-//     x     = 0.0;
-//     h     = 0.25;
-//     v     = (f1(x + h) - f1(x - h)) / (2 * h);
-//     error = fabs(df1(x) - v) * 100 / df1(x);
-//     cout << "Function 1 : Value = "
-//          << v << ", Error = " << error << "%" << endl;
-// }
